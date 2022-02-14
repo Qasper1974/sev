@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    image: 727990409009.dkr.ecr.us-east-2.amazonaws.com/sev:sev_web
+    volumes:
+      - ./app/:/usr/src/app/
+    expose:
+      - 8000
+    environment:
+      - DB_NAME=sev_db
+      - DB_USER=postgres
+      - DB_PASSWORD=admin123
+      - DB_HOST=sev.celcb37hhvjs.us-east-2.rds.amazonaws.com
+      - DB_PORT=5432
+      - DATABASE=postgres
+      - VIRTUAL_HOST=ec2-3-134-140-222.us-east-2.compute.amazonaws.com
+      - VIRTUAL_PORT=8000
