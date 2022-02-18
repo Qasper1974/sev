@@ -2,42 +2,18 @@ version: "3.8"
 services:
   web:
     build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn sev.wsgi:application --bind 0.0.0.0:8000
     image: 727990409009.dkr.ecr.us-east-2.amazonaws.com/sev_aws
     volumes:
       - ./app/:/usr/src/app/
-    ports:
-      - 8000:8000
+    expose:
+      - 8000
     environment:
-      # - DB_NAME=sev_db
-      # - DB_USER=postgres
-      # - DB_PASSWORD=admin123
-      # - DB_HOST=sev.celcb37hhvjs.us-east-2.rds.amazonaws.com
-      # - DB_PORT=5432
-      # - DATABASE=postgres
-      # - VIRTUAL_HOST=ec2-18-119-44-35.us-east-2.compute.amazonaws.com
-      # - VIRTUAL_PORT=8000
       - DB_NAME=sev_db
       - DB_USER=postgres
       - DB_PASSWORD=admin123
-      - DB_HOST=pg
+      - DB_HOST=sev.celcb37hhvjs.us-east-2.rds.amazonaws.com
       - DB_PORT=5432
       - DATABASE=postgres
-
-    depends_on:
-      - pg
-
-  pg:
-      container_name: pg_container
-      image: postgres:13.2-alpine
-      restart: always
-      environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: admin123
-          POSTGRES_DB: sev_db
-          POSTGRES_HOST_AUTH_METHOD: trust
-      ports:
-          - "5432:5432"
-      volumes:
-          - ./data:/data
-          - ./data/misc/django_init.sql:/docker-entrypoint-initdb.d/1-django-init.sql
+      - VIRTUAL_HOST=ec2-18-119-44-35.us-east-2.compute.amazonaws.com
+      - VIRTUAL_PORT=8000
