@@ -2,12 +2,12 @@ version: "3.8"
 services:
   web:
     build: ./app
-    # command: gunicorn sev.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn sev.wsgi:application --bind 0.0.0.0:8000
     image: 727990409009.dkr.ecr.us-east-2.amazonaws.com/sev_aws
     volumes:
       - ./app/:/usr/src/app/
-    ports:
-      - 8000:8000
+    expose:
+      - 8000
     environment:
       - DB_NAME=sev_db
       - DB_USER=postgres
